@@ -1,0 +1,195 @@
+# Things to do
+# Create the swaylock customized command (done)
+# Customize colors for both sway and sway-bar
+# Maybe even create a workspace specifically with cmus running
+# Upload this to github
+
+
+# wallpaper
+set $wallpaper ~/Downloads/wallpaperflare.com_wallpaper.jpg
+
+
+#OUTPUT CONFIGURATION
+# see sway-output for more reference
+# Can't really find a difference, so I think this is going to stay
+# Use the same command to set bgs and transform them
+
+# Setting monitor explicitly to 50Hz might improve graphics performance? (no jitter)
+output * {
+	mode 1920x1080@50Hz 
+	bg $wallpaper fill
+}
+
+
+
+set $mod Mod4
+# For changing focus.
+set $left h
+set $down j
+set $up k
+set $right l
+
+
+# Your preferred terminal emulator
+set $term foot
+# Your preferred application launcher
+# Note: pass the final command to swaymsg so that the resulting window can be opened
+# on the original workspace that the command was run on.
+set $menu dmenu_path | dmenu | xargs swaymsg exec --
+
+# swaylock command to lock screen
+set $lock_command  swaylock -f --indicator-radius 90 --indicator-idle-visible --indicator-thickness 5 --inside-wrong-color ff0000 \
+-i $wallpaper --indicator-y-position 450  --key-hl-color aa0000 --ring-color ffffff --inside-ver-color 000000
+
+# Shutdown command
+set $shutdown shutdown now
+
+# Audio controls
+set $mute  pactl set-sink-mute @DEFAULT_SINK@ toggle
+set $audio_increase pactl set-sink-volume alsa_output.pci-0000_01_00.1.hdmi-stereo +5%
+set $audio_decrease pactl set-sink-volume alsa_output.pci-0000_01_00.1.hdmi-stereo -5%
+
+# CMUS music player
+set $cmus foot cmus
+
+#Key bindings
+
+	# lock screen
+	bindsym $mod+Shift+a exec $lock_command
+
+	# shutdown
+	bindsym $mod+Shift+s exec $shutdown
+
+	# firefox
+	bindsym $mod+Shift+f workspace firefox, exec firefox 
+	bindsym $mod+Shift+g workspace firefox
+
+	# foot
+	bindsym $mod+Return exec $term
+
+	# kill
+	bindsym $mod+Shift+q kill
+	bindsym $mod+Shift+z exit
+
+	# Haven't installed a menu yet
+	bindsym $mod+d exec $menu
+
+	# cmus
+	bindsym $mod+c workspace cmus, exec $cmus
+	bindsym $mod+Shift+r workspace cmus
+
+	# Resize by holding mod and using left mouse
+	# Move windows in floating by using right mouse
+	floating_modifier $mod inverse
+
+	# Reload the configuration file
+	bindsym $mod+Shift+c reload
+
+	# Audio controls (found using wev)
+	bindsym XF86AudioMute exec $mute
+	bindsym XF86AudioLowerVolume exec $audio_decrease
+	bindsym XF86AudioRaiseVolume exec $audio_increase
+
+
+
+# Moving around:
+# Move your focus around
+	bindsym $mod+$left focus left
+	bindsym $mod+$down focus down
+	bindsym $mod+$up focus up
+	bindsym $mod+$right focus right
+
+	# Move the focused window with the same, but add Shift
+	bindsym $mod+Shift+$left move left
+	bindsym $mod+Shift+$down move down
+	bindsym $mod+Shift+$up move up
+	bindsym $mod+Shift+$right move right
+	
+# Workspaces:
+# Switch to workspace
+	bindsym $mod+1 workspace number 1
+	bindsym $mod+2 workspace number 2
+	bindsym $mod+3 workspace number 3
+	bindsym $mod+4 workspace number 4
+	bindsym $mod+5 workspace number 5
+	bindsym $mod+6 workspace number 6
+	bindsym $mod+7 workspace number 7
+	bindsym $mod+8 workspace number 8
+	bindsym $mod+9 workspace number 9
+	bindsym $mod+0 workspace number 10
+	# Move focused container to workspace
+	bindsym $mod+Shift+1 move container to workspace number 1
+	bindsym $mod+Shift+2 move container to workspace number 2
+	bindsym $mod+Shift+3 move container to workspace number 3
+	bindsym $mod+Shift+4 move container to workspace number 4
+	bindsym $mod+Shift+5 move container to workspace number 5
+	bindsym $mod+Shift+6 move container to workspace number 6
+	bindsym $mod+Shift+7 move container to workspace number 7
+	bindsym $mod+Shift+8 move container to workspace number 8
+	bindsym $mod+Shift+9 move container to workspace number 9
+	bindsym $mod+Shift+0 move container to workspace number 10
+
+# Layout stuff:
+
+	bindsym $mod+b splith
+	bindsym $mod+v splitv
+
+	# Switch the current container between different layout styles
+	bindsym $mod+s layout stacking
+	bindsym $mod+w layout tabbed
+	bindsym $mod+e layout toggle split
+
+	# Make the current focus fullscreen
+	bindsym $mod+f fullscreen
+
+	# Toggle the current focus between tiling and floating mode
+	bindsym $mod+Shift+space floating toggle
+
+	# Swap focus between the tiling area and the floating area
+	bindsym $mod+space focus mode_toggle
+
+	# Move focus to the parent container
+	bindsym $mod+a focus parent
+
+	# Toggle split between v and h
+	bindsym $mod+t split toggle
+
+	# Toggle gaps
+	bindsym $mod+Shift+t gaps inner all toggle 10
+
+	exec smart_gaps on
+# Scratchpad:
+
+	# Sway has a "scratchpad", which is a bag of holding for windows.
+	# You can send windows there and get them back later.
+
+	# Move the currently focused window to the scratchpad
+	bindsym $mod+Shift+minus move scratchpad
+
+	# Show the next scratchpad window or hide the focused scratchpad window.
+	# If there are multiple scratchpad windows, this command cycles through them.
+	bindsym $mod+minus scratchpad show
+
+
+default_border pixel 1
+
+bar {
+    position bottom
+
+    # When the status_command prints a new line to stdout, swaybar updates.
+    # The default just shows the current date and time.
+    status_command while date +'%d %A %I:%M:%S %p'; do sleep 1; done
+
+    #Hides the bar by default. Press Mod to show
+    mode hide
+
+    colors {
+
+    	# Can add alpha values at the end e.g: 00
+        statusline #ffffff
+        background #000000
+        inactive_workspace #550000 #550000 #aa0000
+    }
+}
+
+include /etc/sway/config.d/*
