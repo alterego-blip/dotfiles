@@ -188,7 +188,8 @@ bar {
     	# Can add alpha values at the end e.g: 00
         statusline #ffffff
         background #000000
-        inactive_workspace #550000 #550000 #aa0000
+        inactive_workspace #000000 #000000 #ffffff
+	focused_workspace 000000 ffffff aa0000
     }
 }
 
